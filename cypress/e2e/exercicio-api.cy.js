@@ -10,7 +10,7 @@ describe('Testes da Funcionalidade Usuários', () => {
 
             method: 'GET',
 
-            url: 'http://localhost:3000/usuarios',
+            url: '/usuarios',
 
         }).then((response) => {
 
@@ -49,7 +49,7 @@ describe('Testes da Funcionalidade Usuários', () => {
     it('Deve listar usuários cadastrados', () => {
         cy.request({
             method: 'GET',
-            url: 'http://localhost:3000/usuarios',
+            url: '/usuarios',
         }).then((response) => {
             expect(response.status).to.eq(200);
             expect(response.body.usuarios).to.have.length.of.at.least(1);
@@ -69,7 +69,7 @@ describe('Testes da Funcionalidade Usuários', () => {
 
         cy.request({
             method: 'POST',
-            url: 'http://localhost:3000/usuarios',
+            url: '/usuarios',
             body: novoUsuario,
             failOnStatusCode: false
         }).then((response) => {
@@ -94,7 +94,7 @@ describe('Testes da Funcionalidade Usuários', () => {
 
         cy.request({
             method: 'POST',
-            url: 'http://localhost:3000/usuarios',
+            url: '/usuarios',
             body: usuarioInvalido,
             failOnStatusCode: false
         }).then((response) => {
@@ -120,7 +120,7 @@ describe('Testes da Funcionalidade Usuários', () => {
 
         cy.request({
             method: 'POST',
-            url: 'http://localhost:3000/usuarios',
+            url: '/usuarios',
             body: usuarioParaEditar
         }).then((postResponse) => {
 
@@ -135,7 +135,7 @@ describe('Testes da Funcionalidade Usuários', () => {
 
             cy.request({
                 method: 'PUT',
-                url: `http://localhost:3000/usuarios/${userId}`,
+                url: `/usuarios/${userId}`,
                 body: usuarioEditado,
             }).then((putResponse) => {
 
@@ -160,7 +160,7 @@ describe('Testes da Funcionalidade Usuários', () => {
 
         cy.request({
             method: 'POST',
-            url: 'http://localhost:3000/usuarios',
+            url: '/usuarios',
             body: usuarioParaDeletar
         }).then((postResponse) => {
             userId = postResponse.body._id;
@@ -169,7 +169,7 @@ describe('Testes da Funcionalidade Usuários', () => {
 
             cy.request({
                 method: 'DELETE',
-                url: `http://localhost:3000/usuarios/${userId}`,
+                url: `/usuarios/${userId}`,
             }).then((deleteResponse) => {
 
                 expect(deleteResponse.status).to.eq(200);
@@ -179,7 +179,7 @@ describe('Testes da Funcionalidade Usuários', () => {
 
                 cy.request({
                     method: 'GET',
-                    url: `http://localhost:3000/usuarios/${userId}`,
+                    url: `/usuarios/${userId}`,
                     failOnStatusCode: false
                 }).then((getDeletedResponse) => {
                     expect(getDeletedResponse.status).to.eq(400);
