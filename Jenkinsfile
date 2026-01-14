@@ -7,10 +7,8 @@ pipeline {
             }
         }
         stage('Instalar dependencias') {
-            {
-                steps {
-                    bat 'npm install'
-                }
+            steps {
+                bat 'npm install'
             }
         }
         stage('Executar testes API') {
