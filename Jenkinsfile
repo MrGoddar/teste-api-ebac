@@ -1,23 +1,33 @@
 pipeline {
     agent any
+
     stages {
-        stage('clonar repositorio') {
+        stage('Ambiente e Dependências') {
             steps {
-                git branch: 'main', url: 'https://github.com/MrGoddar/teste-api-ebac.git'
-            }
-        }
-        stage('Instalar dependencias') {
-            steps {
-                // Remove a pasta antiga para evitar conflitos de módulos corrompidos no Windows
-                bat 'if exist node_modules rd /s /q node_modules'
+                // Passo básico de instalação solicitado pelo tutor
                 bat 'npm install'
             }
         }
-        stage('Executar testes API') {
+
+        stage('Execução de Testes e Relatórios') {
             steps {
-                // Inicia o servidor em background e aguarda a porta 3000
-                bat 'npm run ci:test'
+                // Utiliza os scripts definidos no package.json conforme sugerido
+                // catchError garante que a pipeline continue para gerar o relatório mesmo se um teste falhar
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    bat 'npm run cy:run'
+                }
+                
+                // Consolida os resultados em um relatório HTML único
+                bat 'npm run report:merge'
+                bat 'npm run report:gen'
             }
+        }
+    }
+
+    post {
+        always {
+            // Arquiva o relatório final para visualização no Jenkins
+            archiveArtifacts artifacts: 'cypress/reports/html/**', fingerprint: true
         }
     }
 }
